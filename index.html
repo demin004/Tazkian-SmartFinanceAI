@@ -77,6 +77,28 @@
             background: rgba(10, 10, 26, 0.95);
         }
 
+        /* Logo styling */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .tazkia-logo {
+            height: 60px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.2));
+        }
+
+        .tazkia-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.3));
+        }
+
         .header h1 {
             font-size: 2.2rem;
             font-weight: 700;
@@ -845,6 +867,9 @@
 <body>
     <div class="container">
         <header class="header">
+            <div class="header-logo">
+                <img src="Logo_Tazkia_University-removebg-preview.png" alt="Logo Tazkia University" class="tazkia-logo">
+            </div>
             <h1>Tazkia Financial Agentic AI</h1>
             <p>Advanced AI-powered financial analysis and investment guidance platform</p>
             
