@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Chat Assistant</title>
+    <title>Tazkia Financial Bot Application</title>
     <style>
         * {
             margin: 0;
@@ -12,29 +12,53 @@
         }
 
         :root {
-            --primary-bg: #0f0f23;
-            --secondary-bg: #1a1a2e;
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary-bg: #0a0a1a;
+            --secondary-bg: #161625;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-bg: rgba(255, 255, 255, 0.05);
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
-            --accent: #00d4ff;
-            --accent-hover: #00b8e6;
+            --text-muted: #666;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
             --user-msg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --bot-msg: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.3);
+            --bot-msg: var(--glass-bg);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --shadow: rgba(0, 0, 0, 0.2);
+            --glow: rgba(59, 130, 246, 0.3);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #161625 35%, #1e293b 100%);
             min-height: 100vh;
             color: var(--text-primary);
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             min-height: 100vh;
             display: flex;
@@ -43,46 +67,173 @@
         }
 
         .header {
-            padding: 20px;
+            padding: 24px 20px;
             text-align: center;
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(15, 15, 35, 0.9);
+            background: rgba(10, 10, 26, 0.95);
         }
 
         .header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), #ff6b9d);
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
 
         .header p {
             color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .features-bar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .feature-badge {
+            background: var(--glass-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            height: fit-content;
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .quick-action-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateX(4px);
+        }
+
+        .agent-status {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .status-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .status-value {
+            color: var(--success);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
         }
 
         .chat-container {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             scroll-behavior: smooth;
+            max-height: calc(100vh - 300px);
         }
 
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
             opacity: 0;
             transform: translateY(20px);
-            animation: slideIn 0.3s ease-out forwards;
+            animation: slideIn 0.4s ease-out forwards;
         }
 
         @keyframes slideIn {
@@ -97,223 +248,58 @@
         }
 
         .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
+            border: 2px solid var(--border);
+            backdrop-filter: blur(10px);
         }
 
         .avatar.user {
             background: var(--user-msg);
+            border-color: transparent;
         }
 
         .avatar.bot {
             background: var(--card-bg);
-            border: 1px solid var(--border);
+            border-color: var(--accent);
         }
 
         .message-content {
-            max-width: 70%;
-            padding: 16px 20px;
-            border-radius: 20px;
+            max-width: 75%;
+            padding: 18px 22px;
+            border-radius: 18px;
             position: relative;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--border);
         }
 
         .message.user .message-content {
             background: var(--user-msg);
-            border-radius: 20px 20px 5px 20px;
+            border-radius: 18px 18px 6px 18px;
+            border-color: transparent;
         }
 
         .message.bot .message-content {
             background: var(--bot-msg);
-            border-radius: 20px 20px 20px 5px;
+            border-radius: 18px 18px 18px 6px;
         }
 
         .message-text {
-            line-height: 1.6;
+            line-height: 1.7;
             word-wrap: break-word;
-        }
-
-        /* File attachment styling */
-        .file-attachment {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .file-attachment .file-icon {
-            font-size: 1.2rem;
-        }
-
-        .file-attachment .file-info {
-            flex: 1;
-        }
-
-        .file-attachment .file-name {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .file-attachment .file-size {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Markdown styling */
-        .message-text h1, 
-        .message-text h2, 
-        .message-text h3 {
-            color: var(--accent);
-            margin: 16px 0 12px 0;
-            font-weight: 600;
-        }
-
-        .message-text h1 {
-            font-size: 1.4rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 8px;
-        }
-
-        .message-text h2 {
-            font-size: 1.2rem;
-        }
-
-        .message-text h3 {
-            font-size: 1.1rem;
-        }
-
-        .message-text p {
-            margin: 12px 0;
-        }
-
-        .message-text ul, 
-        .message-text ol {
-            margin: 12px 0;
-            padding-left: 20px;
-        }
-
-        .message-text li {
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-
-        .message-text strong {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .message-text em {
-            color: #ff6b9d;
-            font-style: italic;
-        }
-
-        .message-text code {
-            background: rgba(0, 212, 255, 0.15);
-            color: var(--accent);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        .message-text pre {
-            background: var(--secondary-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            overflow-x: auto;
-        }
-
-        .message-text pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .message-text blockquote {
-            border-left: 3px solid var(--accent);
-            padding-left: 16px;
-            margin: 16px 0;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .message-text table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-            background: var(--secondary-bg);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .message-text th, 
-        .message-text td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .message-text th {
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-        }
-
-        .message-text tr:last-child td {
-            border-bottom: none;
-        }
-
-        .message-text tr:hover {
-            background: rgba(0, 212, 255, 0.05);
-        }
-
-        .financial-highlight {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 107, 157, 0.1));
-            border: 1px solid var(--accent);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .profit-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            margin: 4px 0;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .company-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .profit-amount {
-            color: #00ff88;
-            font-weight: 700;
-            font-size: 1.1em;
         }
 
         .typing-indicator {
             display: none;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .typing-indicator.show {
@@ -322,15 +308,15 @@
 
         .typing-dots {
             background: var(--bot-msg);
-            padding: 16px 20px;
-            border-radius: 20px 20px 20px 5px;
+            padding: 18px 22px;
+            border-radius: 18px 18px 18px 6px;
             border: 1px solid var(--border);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
         .dots {
             display: flex;
-            gap: 4px;
+            gap: 5px;
         }
 
         .dot {
@@ -341,13 +327,8 @@
             animation: pulse 1.4s infinite ease-in-out;
         }
 
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes pulse {
             0%, 60%, 100% {
@@ -361,8 +342,8 @@
         }
 
         .input-container {
-            padding: 20px;
-            background: rgba(15, 15, 35, 0.95);
+            padding: 20px 24px;
+            background: rgba(10, 10, 26, 0.98);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
         }
@@ -370,15 +351,14 @@
         .input-wrapper {
             display: flex;
             gap: 12px;
-            max-width: 100%;
-            position: relative;
+            align-items: flex-end;
         }
 
         .message-input {
             flex: 1;
             padding: 16px 20px;
             border: 1px solid var(--border);
-            border-radius: 25px;
+            border-radius: 16px;
             background: var(--card-bg);
             color: var(--text-primary);
             font-size: 1rem;
@@ -387,27 +367,33 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             min-height: 24px;
-            max-height: 150px;
+            max-height: 120px;
             line-height: 1.5;
+            font-family: inherit;
         }
 
         .message-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 0 3px var(--glow);
         }
 
         .message-input::placeholder {
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
 
-        .attachment-button {
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-button {
             padding: 16px;
             background: var(--card-bg);
             color: var(--accent);
             border: 1px solid var(--border);
-            border-radius: 50%;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -417,45 +403,256 @@
             backdrop-filter: blur(10px);
         }
 
-        .attachment-button:hover:not(:disabled) {
+        .action-button:hover:not(:disabled) {
             background: var(--accent);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 25px var(--glow);
+            border-color: var(--accent);
         }
 
-        .attachment-button:disabled {
-            opacity: 0.5;
+        .action-button:disabled {
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none;
         }
 
         .send-button {
-            padding: 16px 20px;
             background: var(--accent);
             color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 60px;
+            border-color: var(--accent);
         }
 
         .send-button:hover:not(:disabled) {
             background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+            border-color: var(--accent-hover);
         }
 
-        .send-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .welcome-section {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .welcome-section h2 {
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .welcome-section p {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .example-questions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .example-question {
+            padding: 18px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-question::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .example-question:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--shadow);
+            color: white;
+        }
+
+        .example-question:hover::before {
+            opacity: 0.1;
+        }
+
+        .example-question .icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .example-question .title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .example-question .desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Enhanced markdown styling */
+        .message-text h1, 
+        .message-text h2, 
+        .message-text h3 {
+            color: var(--accent);
+            margin: 20px 0 14px 0;
+            font-weight: 600;
+        }
+
+        .message-text h1 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .message-text h2 {
+            font-size: 1.3rem;
+        }
+
+        .message-text h3 {
+            font-size: 1.15rem;
+        }
+
+        .message-text p {
+            margin: 14px 0;
+            line-height: 1.7;
+        }
+
+        .message-text ul, 
+        .message-text ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .message-text li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .message-text strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .message-text em {
+            color: var(--accent-secondary);
+            font-style: italic;
+        }
+
+        .message-text code {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message-text pre {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .message-text blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
+            margin: 20px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+            background: rgba(59, 130, 246, 0.05);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        /* Financial data styling */
+        .financial-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid var(--accent);
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(15px);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .metric-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .company-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .company-item:hover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .company-value {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.05em;
         }
 
         .file-input {
@@ -463,14 +660,15 @@
         }
 
         .selected-file-display {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(59, 130, 246, 0.1);
             border: 1px solid var(--accent);
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 14px 18px;
             margin-bottom: 12px;
             display: none;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
+            backdrop-filter: blur(10px);
         }
 
         .selected-file-display.show {
@@ -482,82 +680,56 @@
         }
 
         .selected-file-name {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 4px;
         }
 
         .selected-file-size {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
 
         .remove-file-button {
-            background: rgba(255, 107, 157, 0.2);
-            color: #ff6b9d;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
             border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            border-radius: 8px;
+            width: 28px;
+            height: 28px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
         .remove-file-button:hover {
-            background: #ff6b9d;
+            background: var(--danger);
             color: white;
         }
 
         .error-message {
-            background: rgba(255, 59, 48, 0.1);
-            border: 1px solid rgba(255, 59, 48, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
             color: #ff6b6b;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border-radius: 12px;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 0.9rem;
         }
 
-        .welcome-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .welcome-message h2 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-        }
-
-        .example-questions {
-            display: grid;
-            gap: 12px;
-            margin-top: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .example-question {
-            padding: 12px 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            backdrop-filter: blur(10px);
-        }
-
-        .example-question:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--shadow);
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
         }
 
         @media (max-width: 768px) {
@@ -566,38 +738,41 @@
             }
 
             .header {
-                padding: 15px;
+                padding: 20px 16px;
             }
 
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
 
-            .chat-container {
-                padding: 15px;
-            }
-
-            .message-content {
-                max-width: 85%;
-            }
-
-            .input-container {
-                padding: 15px;
-            }
-
-            .input-wrapper {
+            .features-bar {
                 gap: 8px;
             }
 
-            .message-input,
-            .send-button {
-                padding: 14px 16px;
+            .feature-badge {
+                font-size: 0.8rem;
+                padding: 4px 10px;
             }
 
-            .attachment-button {
-                width: 48px;
-                height: 48px;
-                padding: 14px;
+            .main-content {
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .chat-container {
+                padding: 16px;
+            }
+
+            .message-content {
+                max-width: 90%;
+            }
+
+            .input-container {
+                padding: 16px;
+            }
+
+            .example-questions {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -618,116 +793,219 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent);
         }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .pulse {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>💰 Financial Assistant</h1>
-            <p>Your intelligent companion for investment and financial guidance</p>
+            <h1>Tazkia Financial Bot Application</h1>
+            <p>Advanced AI-powered financial analysis and investment guidance platform</p>
+            
+            <div class="features-bar">
+                <div class="feature-badge">
+                    <span>🔍</span> Web Search
+                </div>
+                <div class="feature-badge">
+                    <span>🧠</span> Memory System
+                </div>
+                <div class="feature-badge">
+                    <span>📊</span> Financial Data
+                </div>
+                <div class="feature-badge">
+                    <span>🏢</span> Company Analysis
+                </div>
+                <div class="feature-badge">
+                    <span>📈</span> Market Insights
+                </div>
+            </div>
         </header>
 
-        <div class="chat-container" id="chatContainer">
-            <div class="welcome-message" id="welcomeMessage">
-                <h2>👋 Welcome to Financial Chat</h2>
-                <p>I'm here to help you with investment advice, financial data, and market insights. Ask me anything!</p>
-                
-                <div class="example-questions">
-                    <div class="example-question" onclick="sendExampleQuestion('Bagaimana cara memulai investasi untuk pemula?')">
-                        🚀 Bagaimana cara memulai investasi untuk pemula?
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>🚀 Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Analisis saham terbaru hari ini')">
+                        📊 Analisis Saham Terkini
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Rekomendasi portofolio untuk pemula')">
+                        🎯 Rekomendasi Portofolio
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Trend pasar cryptocurrency')">
+                        ₿ Trend Cryptocurrency
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Strategi investasi jangka panjang')">
+                        📈 Strategi Investasi
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Analisis fundamental vs teknikal')">
+                        🔬 Analisis Fundamental
+                    </button>
+                </div>
+
+                <h3>🤖 Agent Status</h3>
+                <div class="agent-status">
+                    <div class="status-item">
+                        <span class="status-label">Chat Model</span>
+                        <span class="status-value">✅ Active</span>
                     </div>
-                    <div class="example-question" onclick="sendExampleQuestion('Apa saja jenis investasi yang cocok untuk jangka panjang?')">
-                        📈 Apa saja jenis investasi yang cocok untuk jangka panjang?
+                    <div class="status-item">
+                        <span class="status-label">Memory</span>
+                        <span class="status-value">✅ Ready</span>
                     </div>
-                    <div class="example-question" onclick="sendExampleQuestion('Bagaimana cara diversifikasi portfolio yang baik?')">
-                        🎯 Bagaimana cara diversifikasi portfolio yang baik?
+                    <div class="status-item">
+                        <span class="status-label">Web Search</span>
+                        <span class="status-value">✅ Connected</span>
                     </div>
-                    <div class="example-question" onclick="sendExampleQuestion('Kapan waktu yang tepat untuk membeli saham?')">
-                        ⏰ Kapan waktu yang tepat untuk membeli saham?
+                    <div class="status-item">
+                        <span class="status-label">Data Sources</span>
+                        <span class="status-value">✅ Available</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Session</span>
+                        <span class="status-value" id="sessionStatus">✅ Active</span>
                     </div>
                 </div>
             </div>
 
-            <div class="typing-indicator" id="typingIndicator">
-                <div class="avatar bot">🤖</div>
-                <div class="typing-dots">
-                    <div class="dots">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
+            <div class="chat-area">
+                <div class="chat-container" id="chatContainer">
+                    <div class="welcome-section" id="welcomeMessage">
+                        <h2>🌟 Selamat Datang di Tazkia Financial Bot</h2>
+                        <p>Platform AI canggih untuk analisis keuangan, riset investasi, dan panduan finansial yang komprehensif. Didukung oleh teknologi web search real-time dan knowledge base yang luas.</p>
+                        
+                        <div class="example-questions">
+                            <div class="example-question" onclick="sendExampleQuestion('Bagaimana kondisi pasar saham Indonesia hari ini?')">
+                                <span class="icon">📊</span>
+                                <div class="title">Kondisi Pasar Terkini</div>
+                                <div class="desc">Analisis real-time pasar saham Indonesia dan global</div>
+                            </div>
+                            <div class="example-question" onclick="sendExampleQuestion('Rekomendasi saham blue chip untuk investasi jangka panjang')">
+                                <span class="icon">💎</span>
+                                <div class="title">Saham Blue Chip</div>
+                                <div class="desc">Rekomendasi investasi jangka panjang yang stabil</div>
+                            </div>
+                            <div class="example-question" onclick="sendExampleQuestion('Cara diversifikasi portofolio dengan budget 50 juta')">
+                                <span class="icon">🎯</span>
+                                <div class="title">Diversifikasi Portfolio</div>
+                                <div class="desc">Strategi alokasi aset untuk mengurangi risiko</div>
+                            </div>
+                            <div class="example-question" onclick="sendExampleQuestion('Analisis fundamental vs teknikal untuk trading')">
+                                <span class="icon">🔍</span>
+                                <div class="title">Analisis Trading</div>
+                                <div class="desc">Perbandingan metode analisis untuk trading</div>
+                            </div>
+                            <div class="example-question" onclick="sendExampleQuestion('Update terbaru sektor perbankan dan properti')">
+                                <span class="icon">🏦</span>
+                                <div class="title">Sektor Banking & Properti</div>
+                                <div class="desc">Insight terkini industri perbankan dan properti</div>
+                            </div>
+                            <div class="example-question" onclick="sendExampleQuestion('Strategi investasi syariah terbaik 2024')">
+                                <span class="icon">🕌</span>
+                                <div class="title">Investasi Syariah</div>
+                                <div class="desc">Panduan investasi halal sesuai prinsip syariah</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="avatar bot">🤖</div>
+                        <div class="typing-dots">
+                            <div class="dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="input-container">
-            <div class="selected-file-display" id="selectedFileDisplay">
-                <div class="selected-file-info">
-                    <div class="selected-file-name" id="selectedFileName"></div>
-                    <div class="selected-file-size" id="selectedFileSize"></div>
+                <div class="input-container">
+                                        <div class="selected-file-display" id="selectedFileDisplay">
+                        <div class="selected-file-info">
+                            <div class="selected-file-name" id="selectedFileName"></div>
+                            <div class="selected-file-size" id="selectedFileSize"></div>
+                        </div>
+                        <button class="remove-file-button" onclick="removeFile()">×</button>
+                    </div>
+                    
+                    <div class="input-wrapper">
+                        <input 
+                            type="file" 
+                            class="file-input" 
+                            id="fileInput"
+                            accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.png,.jpg,.jpeg"
+                            onchange="handleFileSelect(event)"
+                        />
+                        <div class="action-buttons">
+                            <button 
+                                class="action-button" 
+                                id="attachmentButton" 
+                                onclick="document.getElementById('fileInput').click()"
+                                title="Attach financial document"
+                            >
+                                📎
+                            </button>
+                        </div>
+                        <textarea 
+                            class="message-input" 
+                            id="messageInput" 
+                            placeholder="Tanyakan tentang investasi, analisis saham, perencanaan keuangan, atau unggah dokumen finansial..."
+                            rows="1"
+                        ></textarea>
+                        <div class="action-buttons">
+                            <button class="action-button send-button" id="sendButton" onclick="sendMessage()">
+                                🚀
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <button class="remove-file-button" onclick="removeFile()">×</button>
-            </div>
-            
-            <div class="input-wrapper">
-                <input 
-                    type="file" 
-                    class="file-input" 
-                    id="fileInput"
-                    accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.png,.jpg,.jpeg"
-                    onchange="handleFileSelect(event)"
-                />
-                <button 
-                    class="attachment-button" 
-                    id="attachmentButton" 
-                    onclick="document.getElementById('fileInput').click()"
-                    title="Attach file"
-                >
-                    📎
-                </button>
-                <textarea 
-                    class="message-input" 
-                    id="messageInput" 
-                    placeholder="Ask about investments, financial planning, market trends..."
-                    rows="1"
-                ></textarea>
-                <button class="send-button" id="sendButton" onclick="sendMessage()">
-                    📤
-                </button>
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <script>
+        // API Configuration
         const API_URL = 'https://demin004.app.n8n.cloud/webhook/n8n_chat_agent';
         let isWaiting = false;
         let sessionId = null;
         let selectedFile = null;
+        let messageHistory = [];
 
-        // Initialize session ID
+        // Initialize session and configure marked
         function initializeSession() {
-            sessionId = sessionStorage.getItem("fin_session_id");
-            if (!sessionId) {
-                if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-                    sessionId = crypto.randomUUID();
-                } else {
-                    sessionId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                        const r = Math.random() * 16 | 0;
-                        const v = c == 'x' ? r : (r & 0x3 | 0x8);
-                        return v.toString(16);
-                    });
-                }
-                sessionStorage.setItem("fin_session_id", sessionId);
+            // Generate session ID for this browser session
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                sessionId = crypto.randomUUID();
+            } else {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             }
+            
+            // Update session status
+            document.getElementById('sessionStatus').innerHTML = '✅ Active';
         }
 
-        // Configure marked for better formatting
         marked.setOptions({
             breaks: true,
-            gfm: true
+            gfm: true,
+            sanitize: false
         });
 
+        // DOM Elements
         const chatContainer = document.getElementById('chatContainer');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
@@ -741,7 +1019,7 @@
         // Auto-resize textarea
         messageInput.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
 
         // Handle Enter key
@@ -758,9 +1036,9 @@
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (file) {
-                // Check file size (max 10MB)
-                if (file.size > 10 * 1024 * 1024) {
-                    alert('File size must be less than 10MB');
+                // Check file size (max 15MB for financial documents)
+                if (file.size > 15 * 1024 * 1024) {
+                    showError('Ukuran file harus kurang dari 15MB');
                     event.target.value = '';
                     return;
                 }
@@ -793,12 +1071,9 @@
         function getFileIcon(fileName) {
             const extension = fileName.split('.').pop().toLowerCase();
             const icons = {
-                'pdf': '📄',
-                'doc': '📝', 'docx': '📝',
-                'xls': '📊', 'xlsx': '📊',
-                'csv': '📋',
-                'txt': '📄',
-                'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️',
+                'pdf': '📄', 'doc': '📝', 'docx': '📝',
+                'xls': '📊', 'xlsx': '📊', 'csv': '📋',
+                'txt': '📄', 'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️',
             };
             return icons[extension] || '📎';
         }
@@ -807,13 +1082,17 @@
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    // Remove the data URL prefix (data:type/subtype;base64,)
                     const base64 = reader.result.split(',')[1];
                     resolve(base64);
                 };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
+        }
+
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
         }
 
         function sendExampleQuestion(question) {
@@ -831,8 +1110,9 @@
                 welcomeMessage.style.display = 'none';
             }
 
-            // Add user message with file attachment if present
+            // Add user message
             addMessage(message, 'user', selectedFile);
+            messageHistory.push({ role: 'user', content: message, file: selectedFile?.name });
             
             // Clear input
             messageInput.value = '';
@@ -849,7 +1129,8 @@
                 // Prepare request body
                 const requestBody = {
                     chatInput: message,
-                    session_id: sessionId
+                    session_id: sessionId,
+                    timestamp: new Date().toISOString()
                 };
 
                 // Add file data if present
@@ -867,6 +1148,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(requestBody)
                 });
@@ -877,27 +1159,31 @@
 
                 const data = await response.json();
                 
-                // Simulate realistic typing delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Realistic typing delay based on response length
+                const typingDelay = Math.min(Math.max(data.AIResponse?.length * 10 || 1000, 800), 3000);
+                await new Promise(resolve => setTimeout(resolve, typingDelay));
                 
                 hideTypingIndicator();
                 
                 if (data.AIResponse) {
                     addMessage(data.AIResponse, 'bot');
+                    messageHistory.push({ role: 'assistant', content: data.AIResponse });
                 } else {
-                    throw new Error('No response received from the server');
+                    throw new Error('Tidak ada respons dari server');
                 }
 
             } catch (error) {
                 console.error('Error:', error);
                 hideTypingIndicator();
                 
-                let errorMessage = 'Maaf, terjadi kesalahan saat menghubungi server. Silakan coba lagi.';
+                let errorMessage = 'Maaf, terjadi kesalahan saat menghubungi server. Silakan coba lagi dalam beberapa saat.';
                 
                 if (error.message.includes('Failed to fetch')) {
-                    errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.';
+                    errorMessage = 'Koneksi terputus. Periksa koneksi internet Anda dan coba lagi.';
                 } else if (error.message.includes('500')) {
-                    errorMessage = 'Server sedang mengalami masalah. Silakan coba lagi nanti.';
+                    errorMessage = 'Server sedang mengalami gangguan. Tim teknis sedang menangani masalah ini.';
+                } else if (error.message.includes('429')) {
+                    errorMessage = 'Terlalu banyak permintaan. Silakan tunggu sebentar sebelum mencoba lagi.';
                 }
                 
                 addMessage(errorMessage, 'bot', null, true);
@@ -932,7 +1218,7 @@
             textDiv.className = 'message-text';
             
             if (sender === 'bot' && !isError) {
-                // Parse markdown for bot responses
+                // Parse markdown and enhance financial data
                 const htmlContent = marked.parse(text);
                 textDiv.innerHTML = enhanceFinancialData(htmlContent);
             } else {
@@ -961,64 +1247,67 @@
             // Insert before typing indicator
             chatContainer.insertBefore(messageDiv, typingIndicator);
             
-            // Scroll to bottom
+            // Scroll to bottom with smooth animation
             setTimeout(() => {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 100);
         }
 
         function enhanceFinancialData(htmlContent) {
-            // Enhance financial data presentation
             let enhanced = htmlContent;
             
-            // Convert numbered lists of companies to styled profit items
+            // Enhance financial tables
+            enhanced = enhanced.replace(/<table>/gi, '<table class="financial-table">');
+            
+            // Style financial metrics in lists
             enhanced = enhanced.replace(/<ol>([\s\S]*?)<\/ol>/gi, function(match, listContent) {
-                if (listContent.includes('trillion') || listContent.includes('triliun') || listContent.includes('IDR')) {
-                    // This looks like a financial ranking list
+                if (listContent.includes('trillion') || listContent.includes('triliun') || 
+                    listContent.includes('IDR') || listContent.includes('Rp') || 
+                    listContent.includes('%') || listContent.includes('miliar')) {
+                    
                     const items = listContent.match(/<li>([\s\S]*?)<\/li>/gi);
                     if (items) {
-                        let styledItems = items.map(item => {
+                        let styledItems = '<div class="financial-card"><div class="metric-grid">';
+                        
+                        items.forEach(item => {
                             let content = item.replace(/<\/?li>/gi, '');
-                            
-                            // Extract company name and amount
                             const match = content.match(/^(.*?):\s*(.*?)(?:\.|$)/);
+                            
                             if (match) {
                                 const [, company, amount] = match;
-                                return `
-                                    <div class="profit-item">
+                                styledItems += `
+                                    <div class="company-item">
                                         <span class="company-name">${company.trim()}</span>
-                                        <span class="profit-amount">${amount.trim()}</span>
+                                        <span class="company-value">${amount.trim()}</span>
                                     </div>
                                 `;
+                            } else {
+                                styledItems += `<div class="company-item">${content}</div>`;
                             }
-                            return `<div class="profit-item">${content}</div>`;
-                        }).join('');
+                        });
                         
-                        return `<div class="financial-highlight">${styledItems}</div>`;
+                        styledItems += '</div></div>';
+                        return styledItems;
                     }
                 }
-                return match; // Return original if not financial data
+                return match;
             });
             
-            // Highlight currency amounts (IDR, USD, etc.)
+            // Highlight financial amounts
             enhanced = enhanced.replace(/(\d{1,3}(?:[.,]\d{2,3})*)\s*(trillion|billion|million|juta|miliar|triliun)\s*(IDR|USD|Rp)/gi, 
-                '<span class="profit-amount">💰 $1 $2 $3</span>');
+                '<span class="metric-value">💰 $1 $2 $3</span>');
             
-            // Highlight percentage gains/profits
-            enhanced = enhanced.replace(/(\d+\.?\d*)%/g, 
-                '<span class="profit-amount">📈 $1%</span>');
+            // Highlight percentages
+            enhanced = enhanced.replace(/([+-]?\d+\.?\d*)%/g, 
+                '<span class="metric-value">📈 $1%</span>');
             
-            // Make company names with "Tbk" stand out
-            enhanced = enhanced.replace(/\*\*([^*]+(?:Tbk|PT)[^*]*)\*\*/g, 
+            // Style company names
+            enhanced = enhanced.replace(/\*\*([^*]+(?:Tbk|PT|Corp|Inc)[^*]*)\*\*/g, 
                 '<span class="company-name">🏢 $1</span>');
             
-            // Add icons to section headers
+            // Add icons to headers
             enhanced = enhanced.replace(/<h2>([^<]+)<\/h2>/g, '<h2>📊 $1</h2>');
             enhanced = enhanced.replace(/<h3>([^<]+)<\/h3>/g, '<h3>💡 $1</h3>');
-            
-            // Highlight risk warnings
-            enhanced = enhanced.replace(/(\*\*Risiko[^*]*\*\*)/gi, 
-                '<div style="background: rgba(255, 107, 157, 0.1); border-left: 4px solid #ff6b9d; padding: 12px; margin: 12px 0; border-radius: 8px;">⚠️ $1</div>');
             
             return enhanced;
         }
@@ -1034,17 +1323,150 @@
             typingIndicator.classList.remove('show');
         }
 
-        // Initialize session and focus input on load
+        function showError(message) {
+            // Create temporary error notification
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.top = '20px';
+            errorDiv.style.right = '20px';
+            errorDiv.style.zIndex = '1000';
+            errorDiv.style.maxWidth = '300px';
+            
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Initialize on page load
         window.addEventListener('load', () => {
             initializeSession();
             messageInput.focus();
+            
+            // Add welcome message after small delay
+            setTimeout(() => {
+                if (messageHistory.length === 0) {
+                    addMessage('Selamat datang di Tazkia Financial Bot! Saya siap membantu Anda dengan analisis finansial, riset investasi, dan panduan keuangan yang komprehensif. Apa yang bisa saya bantu hari ini?', 'bot');
+                }
+            }, 1000);
         });
 
-        // Handle page visibility for better UX
+        // Handle page visibility
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 messageInput.focus();
             }
+        });
+
+        // Periodic session health check
+        setInterval(() => {
+            if (sessionId) {
+                // Could implement health check API call here
+                document.getElementById('sessionStatus').innerHTML = '✅ Active';
+            }
+        }, 30000);
+
+        // Add some financial data styling
+        const additionalStyles = `
+            .file-attachment {
+                background: rgba(59, 130, 246, 0.1);
+                border: 1px solid var(--accent);
+                border-radius: 10px;
+                padding: 12px 16px;
+                margin-top: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .file-attachment .file-icon {
+                font-size: 1.3rem;
+            }
+
+            .file-attachment .file-info {
+                flex: 1;
+            }
+
+            .file-attachment .file-name {
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 2px;
+            }
+
+            .file-attachment .file-size {
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+            }
+
+            .financial-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                background: var(--card-bg);
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid var(--border);
+            }
+
+            .financial-table th, 
+            .financial-table td {
+                padding: 14px 18px;
+                text-align: left;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .financial-table th {
+                background: var(--accent);
+                color: white;
+                font-weight: 600;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .financial-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .financial-table tr:hover {
+                background: rgba(59, 130, 246, 0.05);
+            }
+
+            .loading-pulse {
+                animation: pulse-glow 1.5s infinite;
+            }
+
+            @keyframes pulse-glow {
+                0%, 100% { 
+                    box-shadow: 0 0 5px var(--glow);
+                }
+                50% { 
+                    box-shadow: 0 0 20px var(--glow), 0 0 30px var(--glow);
+                }
+            }
+        `;
+
+        // Inject additional styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+
+        // Enhanced error handling
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            showError('Terjadi kesalahan sistem. Silakan refresh halaman.');
+        });
+
+        // Handle network connectivity
+        window.addEventListener('online', () => {
+            document.getElementById('sessionStatus').innerHTML = '✅ Connected';
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('sessionStatus').innerHTML = '⚠️ Offline';
         });
     </script>
 </body>
